@@ -17,6 +17,7 @@ PRE_RIVER = math.perm(46, 3)
 PRE_FLOP_CHILD = 45
 PRE_TURN_CHILD = 44
 
+# Each node represents a world in the game
 class Node:
     def __init__(self, parent, deck, world, stage):
         self.t = 0
@@ -28,10 +29,7 @@ class Node:
         self.parent = parent
         self.stage = stage
 
-class Bot:
-    def __init__(self, hand):
-        self.hand = hand
-
+# Each world gets its own deck, so there is a class for that
 class Deck:
     def __init__(self, deck=None):
         self.deck = ["02club", "02heart", "02spade", "02diamond",
@@ -48,6 +46,7 @@ class Deck:
                       "13club", "13heart", "13spade", "13diamond",
                       "14club", "14heart", "14spade", "14diamond"] if not deck else deck
         self.id = random.randint(1, 100)
+    # Randomly draw a cards
     def draw_cards(self, n):
         drawn = []
         for _ in range(n):
@@ -55,6 +54,7 @@ class Deck:
             self.deck.remove(card)
             drawn.append(card)
         return drawn
+    # Get two opponent cards
     def select_opponent(self):
         opponent = []
         card = random.choice(self.deck)
@@ -68,8 +68,7 @@ class Deck:
     def copy_deck(self):
         return Deck(list(self.deck))
 
-def pre_flop(deck):
-    pass
+# All of the check functions below check if a given hand is the specified ranking
 
 def check_royal_flush(cards):
     types = {}
@@ -269,7 +268,7 @@ def get_child_stage(node):
     else:
         return 0
     
-
+# Perform the Monte Carlo Tree Search on the given hand and stage
 def mcts(root, hole):
     start_time = time.time()
     wins = 0
